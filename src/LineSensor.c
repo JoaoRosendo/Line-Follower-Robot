@@ -15,7 +15,7 @@ ISR(ADC_vect)
     if(MUXSELECTOR>4)
     {   
         MUXSELECTOR = 0;
-        ADMUX = (1 << ADLAR) | (1 << REFS0);  //FAZER UMA MELHOR SOLUCAO
+        ADMUX &= ~(1 << MUX0) & ~(1 << MUX1) & ~(1 << MUX2) & ~(1 << MUX3); 
     }
 
     //começa uma nova leitura ADC
@@ -25,9 +25,9 @@ ISR(ADC_vect)
 void ADC_init()
 {
     // Inicialização Conversor AD 
-    ADCSRA |=  (1 << ADEN) | (1 << ADSC)| (1 << ADIE); //Liga conversor AD e interrupcoes
-    ADCSRA |= (1 << ADPS0)  | (1 << ADPS1) | (1 << ADPS2);
+    ADCSRA |=  (1 << ADEN) | (1 << ADSC)| (1 << ADIE); //Liga conversor AD, começa primeira conversao e liga interrupcoes
+    ADCSRA |= (1 << ADPS0)  | (1 << ADPS1) | (1 << ADPS2); //Escolhe o prescaler maximo (128) 
     ADMUX |= (1 << ADLAR); //Torna o registo left adjusted (facilita leitura)
-    ADMUX |= (1 << REFS0); //Escolhe a referência
+    ADMUX |= (1 << REFS0); //Escolhe a referência (AVCC with external capacitor at AREF pin)
 }
 

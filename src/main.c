@@ -18,17 +18,21 @@ int main(void)
     printf_init(); 
     ADC_init();
 
-    LCD_Init();
-    LCD_WriteString("TOU");
-   
+    lcd_init();
+    lcd_on();
+    lcd_enable_autoscroll();
+    lcd_set_right_to_left();
+    lcd_puts("tou");
+    
   
 while (1) 
 {   
   
-    LCD_WriteString("TOU");
+    _delay_ms(1000);
+    lcd_printf("IR1:%d  IR2:%d  IR3:%d  IR4:%d  IR5:%d" ,IR[0],IR[1],IR[2],IR[3],IR[4]);
     pin_read();
-   // printf("IR1:%d  IR2:%d  IR3:%d  IR4:%d  IR5:%d \n",IR[0],IR[1],IR[2],IR[3],IR[4]); //valores do sensor de linha
-   // lcd_printf("%d",IR[0]);
+   printf("IR1:%d  IR2:%d  IR3:%d  IR4:%d  IR5:%d \n",IR[0],IR[1],IR[2],IR[3],IR[4]); //valores do sensor de linha
+    
     //printf("%d    %d\n",ADMUX,MUXSELECTOR); //teste do interrupt do ADC
 }       
 }

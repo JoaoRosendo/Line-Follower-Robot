@@ -1,117 +1,89 @@
-﻿/**************************** Documentation ******************************/
-/*
- * lcd.h
- *
- * Created: 31/03/2018 11:35:54 
- *  Author: Amr Mostafa
- */ 
-
-/**************************** PreProcessors ******************************/
-#ifndef LCD_H_
-#define LCD_H_
-
-#ifndef F_CPU						// if CPU clock not defined
-#define F_CPU	16000000UL			// then define it as  16MHZ
-#endif
 
 #include <avr/io.h>
 
-#define LCD_DATA_DDR		DDRC						// LCD data/command port direction register		
-#define LCD_DATA_PORT		PORTC						// LCD data/command port register
-#define LCD_DATA_PIN		PINC						// LCD data/command pin register	
-#define LCD_CONTROL_DDR		DDRB						// LCD control port direction register	
-#define LCD_CONTROL_PORT	PORTB						// LCD control port register	
-#define USE_MCU_PORT_HIGH_OR_LOW_NIBBLE			1		// 0>use port 0,1,2,3 pins .. 1>use port 4,5,6,7 pins
-#define LCD_D4_PIN								3		// make it 0 if USE_MCU_PORT_HIGH_OR_LOW_NIBBLE = 0 .. 4 if USE_MCU_PORT_HIGH_OR_LOW_NIBBLE = 1
-#define LCD_D5_PIN								2		// make it 1 if USE_MCU_PORT_HIGH_OR_LOW_NIBBLE = 0 .. 5 if USE_MCU_PORT_HIGH_OR_LOW_NIBBLE = 1
-#define LCD_D6_PIN								1		// make it 2 if USE_MCU_PORT_HIGH_OR_LOW_NIBBLE = 0 .. 6 if USE_MCU_PORT_HIGH_OR_LOW_NIBBLE = 1
-#define LCD_D7_PIN								0		// make it 3 if USE_MCU_PORT_HIGH_OR_LOW_NIBBLE = 0 .. 7 if USE_MCU_PORT_HIGH_OR_LOW_NIBBLE = 1
-#define RS										4		// LCD RS pin
-#define RW										3		// LCD R/W pin
-#define EN										2		// LCD EN pin
-#define ENABLE_READ_MODE						(LCD_CONTROL_PORT |=1<<RW)			// read mode enable R/W = 1
-#define ENABLE_WRITE_MODE						(LCD_CONTROL_PORT &=~(1<<RW))		// write mode enable R/W = 0
-#define ENABLE_DATA_REG							(LCD_CONTROL_PORT |=1<<RS)			// data sending enable RS = 1
-#define ENABLE_CMD_REG							(LCD_CONTROL_PORT &=~(1<<RS))		// command sending enable RS = 0
-#define EN_HIGH									(LCD_CONTROL_PORT |=1<<EN)			// make EN high
-#define EN_LOW									(LCD_CONTROL_PORT &=~(1<<EN))		// make EN low
-#define CURSOR_ON								0		// just indicator number make cursor on
-#define CURSOR_BLINK							1		// just indicator number make cursor blink
-#define CURSOR_OFF								2		// just indicator number make cursor off
-#define RIGHT									0 		// just indicator number make cursor/display shift right
-#define LEFT									1		// just indicator number make cursor/display shift left
+// Edit these
+#define LCD_DDR  DDRD
+#define LCD_PORT PORTD
+#define CONTROL_DDR DDRB
+#define CONTROL_PORT PORTB
 
-/******************* Prototypes and Global variables *********************/
-// function to send H-to-L enable pulse to LCD
-// INPUT: ...
-// OUTPUT: ...
-// NOTES: minimum delay is 450ns, so 1us here is good
-void LCD_Latch(void);
+//control
+#define LCD_RS 2
+#define LCD_RW 1
+#define LCD_EN 0
 
-// function to send command to LCD
-// INPUT: cmd>command in 8bits
-// OUTPUT: ...
-// NOTES: using preprocessor #if here to allow user compile this code
-//	if LCD D4-D7 are connected to micro controller port pins 4-7 OR pins 0-3
-void LCD_WriteCMD(unsigned char cmd);
+//LCD
+#define LCD_D0 5
+#define LCD_D1 4
+#define LCD_D2 3
+#define LCD_D3 2
 
-// function to send command to LCD
-// INPUT: data>ascii character in 8bits
-// OUTPUT: ...
-// NOTES: using preprocessor #if here to allow user compile this code
-//	if LCD D4-D7 are connected to micro controller port pins 4-7 OR pins 0-3
-void LCD_WriteData(unsigned char data);
+#define LCD_COL_COUNT 16
+#define LCD_ROW_COUNT 2
 
-// function to send string to LCD
-// INPUT: pointer to the first element of the character array
-// OUTPUT: ...
-// NOTES: ...
-void LCD_WriteString(char *str);
+// The rest should be left alone
+#define LCD_CLEARDISPLAY   0x01
+#define LCD_RETURNHOME     0x02
+#define LCD_ENTRYMODESET   0x04
+#define LCD_DISPLAYCONTROL 0x08
+#define LCD_CURSORSHIFT    0x10
+#define LCD_FUNCTIONSET    0x20
+#define LCD_SETCGRAMADDR   0x40
+#define LCD_SETDDRAMADDR   0x80
 
-// function to clear the LCD
-// INPUT: ...
-// OUTPUT: ...
-// NOTES: ...
-void LCD_Clear(void);
+#define LCD_ENTRYRIGHT          0x00
+#define LCD_ENTRYLEFT           0x02
+#define LCD_ENTRYSHIFTINCREMENT 0x01
+#define LCD_ENTRYSHIFTDECREMENT 0x00
 
-// function to select cursor mode
-// INPUT: mode> 3 modes available as follow:
-//				CURSOR_ON: cursor is on and stable (no blinking)
-//				CURSOR_BLINK: cursor is on and blinking
-//				CURSOR_OFF: cursor is off (disappears)
-// OUTPUT: ...
-// NOTES: ...
+#define LCD_DISPLAYON  0x04
+#define LCD_DISPLAYOFF 0x00
+#define LCD_CURSORON   0x02
+#define LCD_CURSOROFF  0x00
+#define LCD_BLINKON    0x01
+#define LCD_BLINKOFF   0x00
 
-void LCD_CursorMode(unsigned char mode);
+#define LCD_DISPLAYMOVE 0x08
+#define LCD_CURSORMOVE  0x00
+#define LCD_MOVERIGHT   0x04
+#define LCD_MOVELEFT    0x00
 
-// function to shift cursor 1 step right OR left
-// INPUT: direction> 2 directions available as follow:
-//				RIGHT: shift cursor 1 step to right
-//				LEFT: shift cursor 1 step to left
-// OUTPUT: ...
-// NOTES: ...
-void LCD_CursorShift(unsigned char direction);
+#define LCD_8BITMODE 0x10
+#define LCD_4BITMODE 0x00
+#define LCD_2LINE    0x08
+#define LCD_1LINE    0x00
+#define LCD_5x10DOTS 0x04
+#define LCD_5x8DOTS  0x00
 
-// function to shift data on LCD 1 step right OR left
-// INPUT: direction> 2 directions available as follow:
-//				RIGHT: shift data on LCD 1 step to right
-//				LEFT: shift data on LCD 1 step to left
-// OUTPUT: ...
-// NOTES: ...
-void LCD_DisplayShift(unsigned char direction);
+void lcd_init(void);
 
-// function to move LCD AC(address counter of the LCD DDRAM) to a certain position
-// INPUT: line> allowed values are: 1 to move AC to the first horizontal line
-//									2 to move AC to the second horizontal line
-//		  column> allowed values are from 1:16 to move the AC to any position
-// OUTPUT: ...
-// NOTES: any values other than 1 OR 2 for line .. 1-16 for column will be ignored
-void LCD_Line_Column(unsigned char line , unsigned char column);
+void lcd_command(uint8_t command);
+void lcd_write(uint8_t value);
 
-// function to initialize the 16x2 LCD in 4-bits mode and also initialize micro controller port pins
-// INPUT: ...
-// OUTPUT: ...
-// NOTES: ...
-void LCD_Init(void);
+void lcd_on(void);
+void lcd_off(void);
 
-#endif /* LCD_H_ */
+void lcd_clear(void);
+void lcd_return_home(void);
+
+void lcd_enable_blinking(void);
+void lcd_disable_blinking(void);
+
+void lcd_enable_cursor(void);
+void lcd_disable_cursor(void);
+
+void lcd_scroll_left(void);
+void lcd_scroll_right(void);
+
+void lcd_set_left_to_right(void);
+void lcd_set_right_to_left(void);
+
+void lcd_enable_autoscroll(void);
+void lcd_disable_autoscroll(void);
+
+void lcd_create_char(uint8_t location, uint8_t *charmap);
+
+void lcd_set_cursor(uint8_t col, uint8_t row);
+
+void lcd_puts(char *string);
+void lcd_printf(char *format, ...);

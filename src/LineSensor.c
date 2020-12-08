@@ -1,6 +1,12 @@
 #include "LineSensor.h"
 
 uint8_t IR[5], MUXSELECTOR = 0;
+uint8_t AVRG;
+uint8_t P, I, D, previous_P, Motor_speed;
+uint8_t Kp=0;
+uint8_t Ki=0;
+uint8_t Kd=0;
+
 
 ISR(ADC_vect)
 {   
@@ -30,4 +36,17 @@ void ADC_init()
     ADMUX |= (1 << ADLAR); //Torna o registo left adjusted (facilita leitura)
     ADMUX |= (1 << REFS0); //Escolhe a referência (AVCC with external capacitor at AREF pin)
 }
+void AVRG_IR()
+{
+    AVRG = (0 * IR[0] + 1000 * IR[1] + 2000 * IR[2] + 3000 * IR[3] +4000 * IR[4]) / (IR[0] + IR[1] + IR[2] + IR[3] + IR[4]);
+}
+void PID()
+{
+    P = AVRG - 2000;
+    I += P;
+    D = P - previous_P;
 
+    previous_P = P;
+
+    Motor_speed = P * Kp + I * Ki + D * Kd;
+}

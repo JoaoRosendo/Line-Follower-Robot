@@ -16,29 +16,23 @@ void pin_read()
 
 
 int main(void)
-{    
-   // DDRC |= (1 << PC5) | (1 << PC4);  
-   // PORTC |= (1 << PC5) | (1 << PC4);  
-    //sei();
-    printf_init(); 
-   // ADC_init();
-    //motor_init(); //desligar para retornar funcionalidade aos pinos que usam PWM
-    
-    
-    
-    
-    //i2c_init();
-    
-    start();
-
-   _delay_ms(1000);
-     clearScreen();
+{   
+   _delay_ms(2500);
+   sei();
+   printf_init(); 
+   ADC_init();
+   motor_init(); //desligar para retornar funcionalidade aos pinos que usam PWM
+   LCD_init();
+   
+   
+     /*clearScreen();
    Send_A_String("tou    TOU ttttttttttt");
    _delay_ms(1000);
 
-   clearScreen();
+   clearScreen();*/
 
    lcd_info_print("O numero e %d \n", teste);
+   
     
 while (1) 
 {   

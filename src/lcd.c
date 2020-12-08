@@ -9,11 +9,25 @@
 #define rs PD2    //pin8 
 #define en PD3    //pin9
 
-
-
 int base_address[8]={64,72,80,88,96,104,112,120};
 
-void start()  
+
+void  lcd_info_print() //Funcao que coloca no LCD o valor dado pelos sensores de 0 a 99 
+{	
+	char top[16];
+	uint8_t auxIR[5];
+
+	for(int i = 0; i<5; i++)
+	{
+		auxIR[i] = IR[i]*0.392;
+	}
+
+	sprintf(top, " %2d|%2d|%2d|%2d|%2d", auxIR[0], auxIR[1], auxIR[2],auxIR[3],auxIR[4]);
+
+	Send_A_String(top);
+}
+
+void LCD_init()  
 {	
 	DDRD |= (1 << PD2) | (1 << PD3);    // PD2 and PD3 declared as output
 	DDRD |= 0xF0;    // PD4,PD5,PD6,PD7 declared as output
@@ -28,6 +42,7 @@ void start()
 	 _delay_ms(20);
 	command(0x80);	// Sets cursor to (0,0)
 	 _delay_ms(20);
+	
 }
 
 
@@ -300,18 +315,9 @@ void createChar(int num,unsigned int *charArray)// Takes input two arguments
 // data(0);        CORRECT
 // data('0');      INCORRECT
 
-void  lcd_info_print()
-{	
-	char top[16];
-	uint8_t auxIR[5];
 
-	for(int i = 0; i<5; i++)
-	{
-		auxIR[i] = IR[i]*0.392;
-	}
-	sprintf(top, " %2d|%2d|%2d|%2d|%2d", auxIR[0], auxIR[1], auxIR[2],auxIR[3],auxIR[4]);
-	Send_A_String(top);
-}
+//
+
 
 
 

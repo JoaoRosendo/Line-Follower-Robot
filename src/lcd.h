@@ -1,4 +1,4 @@
-void start();
+void LCD_init();
 void command(char);
 void data(char);
 void Send_A_String(char *StringOfCharacters);
@@ -18,5 +18,5 @@ void scrollDisplayRight();
 void autoscroll();
 void noAutoscroll();
 void createChar(int num,unsigned int *charArray);
-void  lcd_info_print();
+void lcd_info_print();
 

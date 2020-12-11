@@ -36,7 +36,7 @@ void  lcd_info_print() //Funcao que coloca no LCD o valor dado pelos sensores de
 	
 	for(int i = 0; i<5; i++)
 	{
-		auxIR[i] = IR[i]*0.392;
+		auxIR[i] = IR[i]*0.0977;
 	}
 
 	sprintf(top, " %2d|%2d|%2d|%2d|%2d", auxIR[0], auxIR[1], auxIR[2],auxIR[3],auxIR[4]);

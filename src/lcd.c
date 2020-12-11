@@ -41,7 +41,7 @@ void  lcd_info_print() //Funcao que coloca no LCD o valor dado pelos sensores de
 
 	sprintf(top, " %2d|%2d|%2d|%2d|%2d", auxIR[0], auxIR[1], auxIR[2],auxIR[3],auxIR[4]);
 	
-	clearScreen();
+	//clearScreen(); nao parece ser necessario
 	Send_A_String(top);
 	setCursor(0,0);
 	print_ready = 0;

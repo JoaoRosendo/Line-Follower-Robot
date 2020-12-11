@@ -19,19 +19,16 @@ int main(void)
    Send_A_String("eita mlk");
    _delay_ms(2000);
    clearScreen();
-   OCR1AL= 100;
-   OCR1BL= 100;
-   //PORTB |= (1<< PB0) | (1<< PB4);
-   
-   setup_timer2();// setup timer2 (ir receiver)
-   setup_int0(1);// setup interrupt da porta 2 (ir receiver)
-   
-
-
-while (1) 
+   OCR1AL= 50;
+   OCR1BL= 50;
+   PORTB |= (1<< PB0) | (1<< PB4);
+  
+   while (1) 
 {   
-   AVRG_IR();
-   
-   //printf("IR1:%d  IR2:%d  IR3:%d  IR4:%d  IR5:%d AVRG:%d\n",IR[0],IR[1],IR[2],IR[3],IR[4], AVRG); //valores do sensor de linha
-}       
+   if(print_ready == 1)
+   {
+      lcd_info_print();
+   }
+   // printf("IR1:%d  IR2:%d  IR3:%d  IR4:%d  IR5:%d MUXSELECTOR:%d ADMUX:%d \n",IR[0],IR[1],IR[2],IR[3],IR[4], MUXSELECTOR, ADMUX); //valores do sensor de linha
+}
 }

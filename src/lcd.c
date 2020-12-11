@@ -4,6 +4,7 @@
 #include<stdlib.h>
 #include "lcd.h"
 #include "LineSensor.h"
+#include "stdio.h"
 //D4-D7 connected to D4-D7
 
 #define rs PD2    //pin8 
@@ -12,18 +13,20 @@
 
 
 uint8_t clockdivider = 0;
+uint8_t print_ready;
 
 int base_address[8]={64,72,80,88,96,104,112,120};
 
 ISR(TIMER0_OVF_vect)
 {
 	clockdivider++;
-
 	if(clockdivider == UPDATEFREQ)
 	{	
+		printf("%d\n",print_ready);
 		clockdivider = 0;
-		lcd_info_print();
-	}	
+		print_ready = 1;
+		printf("%d\n",print_ready);
+	}
 }
 
 void  lcd_info_print() //Funcao que coloca no LCD o valor dado pelos sensores de 0 a 99 
@@ -41,29 +44,24 @@ void  lcd_info_print() //Funcao que coloca no LCD o valor dado pelos sensores de
 	clearScreen();
 	Send_A_String(top);
 	setCursor(0,0);
+	print_ready = 0;
 }
 
 void LCD_init()  
 {	
 	DDRD |= (1 << PD2) | (1 << PD3);    // PD2 and PD3 declared as output
 	DDRD |= (1 << PD4) | (1 << PD5) | (1 << PD6) | (1 << PD7);    // PD4,PD5,PD6,PD7 declared as output
-	_delay_ms(20);
-	command(0x28);	// To initialize LCD in 2 lines, 5X8 dots and 4bit mode.
-	_delay_ms(20);
-	command(0x0C);	// Display ON cursor OFF. E for cursor ON and C for cursor OFF
-	_delay_ms(20);
-	command(0x06);	// Entry mode-increment cursor by 1
-	_delay_ms(20);
-	command(0x01);	// Clear screen
-	_delay_ms(20);
-	command(0x80);	// Sets cursor to (0,0)
-	_delay_ms(20);
-
-
 	
+	command(0x28);	// To initialize LCD in 2 lines, 5X8 dots and 4bit mode.
+	command(0x0C);	// Display ON cursor OFF. E for cursor ON and C for cursor OFF
+	command(0x06);	// Entry mode-increment cursor by 1
+	command(0x01);	// Clear screen
+	command(0x80);	// Sets cursor to (0,0)
+
 	TCCR0B |= (1 << CS02) | (1 << CS00); //pre scaler maximo de 1024, 15625 Hz
 	TIMSK0 |= (1 << TOIE0); //Liga interrupts
 
+	print_ready  = 0;
 }
 
 

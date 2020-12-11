@@ -13,6 +13,19 @@ ISR(TIMER2_OVF_vect) {                           // Timer1 interrupt service rou
   TCCR2B = 0;                                    // Disable Timer1 module
 }
 
+void setup_int0 (int T){
+  if (T!=0) {
+    EICRA=0;
+    EICRA |=  (1<< ISC00);                           //set interrupt to occur on change
+    EIMSK=0;
+    EIMSK |= (1<<INT0);                             // Enable external interrupt (INT0)
+  }
+  else if (T==0) {
+    EICRA &=  ~(1<< ISC00);                          
+    EIMSK &= ~(1<<INT0);   
+  }
+}
+
 ISR(INT0_vect) {
   unsigned int timer_value;
   if(nec_state != 0){
@@ -86,18 +99,7 @@ void setup_timer2() {
   TIMSK2 = 1;                                    // enable Timer1 overflow interrupt
 }
 
-void setup_int0 (int T){
-  if (T!=0) {
-    EICRA=0;
-    EICRA |=  (1<< ISC00);                           //set interrupt to occur on change
-    EIMSK=0;
-    EIMSK |= (1<<INT0);                             // Enable external interrupt (INT0)
-  }
-  else if (T==0) {
-    EICRA &=  ~(1<< ISC00);                          
-    EIMSK &= ~(1<<INT0);   
-  }
-}
+
 
 int button_press()
 {

@@ -13,7 +13,7 @@ ISR(ADC_vect)
     //MUXSELECTOR escolhe o porto para ler; quando lido passa o próximo. IR[0] é o sensor mais à esquerda, IR[4] é o sensor mais à direita
     
     //Le o registo e incrementa variaveis de leitura
-    IR[MUXSELECTOR] = ADCH;  
+    IR[MUXSELECTOR] = (255-ADCH);  
     ADMUX = ADMUX + 1;
     MUXSELECTOR++;
     

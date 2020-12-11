@@ -1,3 +1,5 @@
+extern uint8_t print_ready;
+
 void LCD_init();
 void command(char);
 void data(char);

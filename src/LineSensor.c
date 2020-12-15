@@ -1,12 +1,12 @@
 #include "LineSensor.h"
 
 uint8_t IR[5], MUXSELECTOR = 0;
-uint16_t AVRG;
-int P, I, D, previous_P;
-uint8_t Kp=0.07;
-uint8_t Ki=0.0008;
-uint8_t Kd=0.6;
-float Motor_speed;
+int AVRG;
+long P=0, I=0, D=0, previous_P=0;
+float Kp=0.15;
+float Ki=0;
+float Kd=0.9;
+long Motor_speed=0;
 
 
 ISR(ADC_vect)
@@ -14,7 +14,7 @@ ISR(ADC_vect)
     //MUXSELECTOR escolhe o porto para ler; quando lido passa o próximo. IR[0] é o sensor mais à esquerda, IR[4] é o sensor mais à direita
     
     //Le o registo e incrementa variaveis de leitura
-    IR[MUXSELECTOR] = (255-ADCH);  
+    IR[MUXSELECTOR] = ADCH;  
     ADMUX = ADMUX + 1;
     MUXSELECTOR++;
     
@@ -39,17 +39,17 @@ void ADC_init()
 }
 void AVRG_IR()
 {
-    AVRG = (0 * IR[0] + 1000 * IR[1] + 2000 * IR[2] + 3000 * IR[3] +4000 * IR[4]) / (IR[0] + IR[1] + IR[2] + IR[3] + IR[4]);
+    AVRG = ( (uint32_t) 0 * IR[0] + (uint32_t) 1000 * IR[1] + (uint32_t) 2000 * IR[2] + (uint32_t) 3000 * IR[3] + (uint32_t) 4000 * IR[4]) / (IR[0] + IR[1] + IR[2] + IR[3] + IR[4]);
 }
-float PID()
+void PID()
 {
-    P = (int) AVRG - 2000;
-    I += P;
-    D = P - previous_P;
+    P = (long) AVRG-2008;
+    I += (long) P;
+    D = (long) P - previous_P;
 
     previous_P = P;
 
-    Motor_speed = P * Kp + I * Ki + D * Kd;
+    Motor_speed = (long) P * Kp + (long) I * Ki + (long) D * Kd;
 
-    return Motor_speed;
 }
+

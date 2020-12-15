@@ -1,4 +1,9 @@
 #include "motor.h"
+#include "LineSensor.h"
+
+int MOTOR_SPEED_A=0;
+int MOTOR_SPEED_B=0;
+
 
 ISR(TIMER1_COMPA_vect)
 {
@@ -29,6 +34,32 @@ void motor_init()
     TCCR1B |= (1 << CS12) | (1 << CS10); //Set timer prescaler 1024 (15625 Hz)<100kHz ( 100kHz -> maximo do driver do motor)
     TIMSK1 |= (1 << OCIE1A) | (1 << OCIE1B); //Liga interrupts
     
+}
+
+void set_speed()
+{
+    MOTOR_SPEED_A=120-Motor_speed;
+    MOTOR_SPEED_B=120+Motor_speed;
+
+   if (MOTOR_SPEED_A > 255) {
+    MOTOR_SPEED_A = 255;
+    }
+
+    if (MOTOR_SPEED_B > 255) {
+    MOTOR_SPEED_B = 255;
+    }
+
+    if (MOTOR_SPEED_A < 0) {
+    MOTOR_SPEED_A = 0;
+    }
+
+    if (MOTOR_SPEED_B < 0) {
+    MOTOR_SPEED_B = 0;
+    } 
+
+    OCR1AL=MOTOR_SPEED_A;
+    OCR1BL=MOTOR_SPEED_B;
+
 }
 
 //fazer funcao que rtecebe parametros com velocidade do motor de 0 a 100, que modifica o pwm dos motores

@@ -7,7 +7,7 @@
 #include "stdio.h"
 //D4-D7 connected to D4-D7
 
-#define rs PD2    //pin8 
+#define rs PD1    //pin8 
 #define en PD3    //pin9
 #define UPDATEFREQ 50 //Frequencia de update do LCD (minimo ~= 50)
 
@@ -22,24 +22,28 @@ ISR(TIMER0_OVF_vect)
 	clockdivider++;
 	if(clockdivider == UPDATEFREQ)
 	{	
-		printf("%d\n",print_ready);
 		clockdivider = 0;
 		print_ready = 1;
-		printf("%d\n",print_ready);
 	}
 }
 
 void  lcd_info_print() //Funcao que coloca no LCD o valor dado pelos sensores de 0 a 99 
 {	
 	char top[16];
-	uint8_t auxIR[5];
+	uint8_t  auxkp, auxkd;
+	/*uint8_t auxIR[5];
 	
 	for(int i = 0; i<5; i++)
 	{
 		auxIR[i] = IR[i]*0.392;
 	}
 
-	sprintf(top, " %2d|%2d|%2d|%2d|%2d", auxIR[0], auxIR[1], auxIR[2],auxIR[3],auxIR[4]);
+	sprintf(top, " %2d|%2d|%2d|%2d|%2d", auxIR[0], auxIR[1], auxIR[2],auxIR[3],auxIR[4]);*/
+	auxkp=Kp*100;
+	auxkd=Kd*100;
+
+	sprintf(top, " %2d|||%2d", auxkp, auxkd);
+
 	
 	//clearScreen(); nao parece ser necessario
 	Send_A_String(top);
@@ -49,7 +53,7 @@ void  lcd_info_print() //Funcao que coloca no LCD o valor dado pelos sensores de
 
 void LCD_init()  
 {	
-	DDRD |= (1 << PD2) | (1 << PD3);    // PD2 and PD3 declared as output
+	DDRD |= (1 << PD1) | (1 << PD3);    // PD1 and PD3 declared as output
 	DDRD |= (1 << PD4) | (1 << PD5) | (1 << PD6) | (1 << PD7);    // PD4,PD5,PD6,PD7 declared as output
 	
 	command(0x28);	// To initialize LCD in 2 lines, 5X8 dots and 4bit mode.

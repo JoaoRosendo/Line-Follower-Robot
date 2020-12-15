@@ -7,11 +7,10 @@
 #include "lcd.h"
 #include "IRRECEIVER.h"
 
-
 int main(void)
 {   
-    sei();
-   printf_init(); 
+   sei();
+   //printf_init(); 
    ADC_init();
    motor_init(); //desligar para retornar funcionalidade aos pinos que usam PWM
    LCD_init();
@@ -19,16 +18,70 @@ int main(void)
    Send_A_String("eita mlk");
    _delay_ms(2000);
    clearScreen();
-   OCR1AL= 50;
-   OCR1BL= 50;
-   //PORTB |= (1<< PB0) | (1<< PB4);
-  
+
+   PORTB |= (1<< PB0) | (1<< PB4);
+   int on=0;
+   int code=0;
+   
+   setup_timer2();
+   setup_int0(1);
+
    while (1) 
-{   
-   if(print_ready)
-   {
-      lcd_info_print();
+   {   
+      
+      code=button_press();
+
+      if (code == 0xa25d)
+      {
+         on+=1;
+      }
+
+      if (code == 0xe21d)
+      {
+         if(print_ready)
+         {
+         lcd_info_print();
+         }
+      }
+
+
+
+      if (code == 0x22dd)
+      {
+         Kp+=0.05;
+      }
+
+      if (code == 0xe01f)
+      {
+         Kp-=0.05;
+      }
+
+      if (code == 0xc13d)
+      {
+         Kd+=0.1;
+      }
+      if (code == 0x906f)
+      {
+         Kd-=0.1;
+      }
+
+
+
+      
+      if (on%2 == 0)
+      {
+         OCR1AL=0;
+         OCR1BL=0;
+      }
+
+      if (on%2 != 0)
+      {
+         AVRG_IR();
+         PID();
+         set_speed();
+
+      }
+
+      //printf("IR1:%d  IR2:%d  IR3:%d  IR4:%d  IR5:%d AVRG:%d PID:%ld MSA:%d MSB:%d  \n",IR[0],IR[1],IR[2],IR[3],IR[4], AVRG, Motor_speed, OCR1AL,OCR1BL); //valores do sensor de linha
    }
-    printf("IR1:%d  IR2:%d  IR3:%d  IR4:%d  IR5:%d MUXSELECTOR:%d ADMUX:%d \n",IR[0],IR[1],IR[2],IR[3],IR[4], MUXSELECTOR, ADMUX); //valores do sensor de linha
-}
 }

@@ -107,10 +107,9 @@ int button_press()
       nec_ok = 0;                                // Reset decoding process
       nec_state = 0;
       TCCR2B = 0;                                // Disable Timer1 module
-      ir_code = ir_code >> 16;
-      //printf("HEX: %x ", ir_code);              // Display inverted command in hex format*/
+      ir_code = ir_code & 0x0000FFFF;          
       setup_int0(1);  
-      return 1;                           // Enable external interrupt (INT0)
+      return ir_code;                           // Enable external interrupt (INT0)
    }
    else
    {

@@ -51,7 +51,7 @@ int main(void)
          Kp+=0.05;
       }
 
-      if (code == 0xe01f)
+      if (code == 0xe01f) // down arrow button 
       {
          Kp-=0.05;
       }
@@ -62,7 +62,7 @@ int main(void)
       {
          Ki+=0.00005;
       }
-      if (code == 0xa857)
+      if (code == 0xa857) // VOL- button 
       {
          Ki-=0.00005;
       }
@@ -73,13 +73,13 @@ int main(void)
       {
          Kd+=0.1;
       }
-      if (code == 0x906f)
+      if (code == 0x906f)// up arrow button 
       {
          Kd-=0.1;
       }
 
 
-       if (code == 0x6897) // skip track button
+       if (code == 0x6897) // 0 button
       {
          if (base_speed==250)
          {
@@ -90,7 +90,7 @@ int main(void)
             base_speed+=10;
          }
       }
-      if (code == 0x30cf)
+      if (code == 0x30cf)// 1 button
       {
         
          base_speed-=10;

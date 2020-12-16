@@ -89,7 +89,10 @@ int main(void)
       }
       if (code == 0x30cf)// 1 button
       {
-         base_speed-=10;
+         if (base_speed!=0)
+         {
+            base_speed-=10;
+         }
       }
 
 

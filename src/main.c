@@ -79,22 +79,18 @@ int main(void)
       }
 
 
-       if (code == 0x6897) // skip track button
+       
+      if (code == 0x6897) // skip track button
       {
-         if (base_speed==250)
-         {
-            base_speed=250;
-         }
-         else
+         if (base_speed!=250)
          {
             base_speed+=10;
          }
       }
+      
       if (code == 0x30cf)
       {
-        
          base_speed-=10;
-      
       }
 
 

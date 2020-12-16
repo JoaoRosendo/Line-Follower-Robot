@@ -3,7 +3,7 @@
 
 extern uint8_t IR[5];
 extern uint8_t MUXSELECTOR;
-extern int AVRG;
+extern short int AVRG;
 extern long Motor_speed;
 extern long P, I, D, previous_P; 
 extern float Kp;

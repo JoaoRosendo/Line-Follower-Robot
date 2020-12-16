@@ -10,7 +10,7 @@
 int main(void)
 {   
    sei();
-   //printf_init(); 
+  // printf_init(); 
    ADC_init();
    motor_init(); //desligar para retornar funcionalidade aos pinos que usam PWM
    LCD_init();
@@ -48,23 +48,23 @@ int main(void)
 
       if (code == 0x22dd) // undo track button  
       {
-         Kp+=0.05;
+         Kp+=0.02;
       }
 
       if (code == 0xe01f) // down arrow button 
       {
-         Kp-=0.05;
+         Kp-=0.02;
       }
 
 
 
       if (code == 0x02fd) // pause track button  
       {
-         Ki+=0.00005;
+         Ki+=0.00001;
       }
       if (code == 0xa857) // VOL- button 
       {
-         Ki-=0.00005;
+         Ki-=0.00001;
       }
       
 
@@ -75,7 +75,7 @@ int main(void)
       }
       if (code == 0x906f)// up arrow button 
       {
-         Kd-=0.1;
+         Kd-=0.05;
       }
 
 

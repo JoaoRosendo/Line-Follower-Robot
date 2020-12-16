@@ -1,15 +1,15 @@
 #include "LineSensor.h"
 
 uint8_t IR[5], MUXSELECTOR = 0;
-int AVRG;
+short int AVRG;
 long P=0, I=0, D=0, previous_P=0;
 
-float Kp=0.15;
-float Ki=0;
-float Kd=0.9;
+float Kp= 0.22;
+float Ki=0.00003;
+float Kd=0.75;
 long Motor_speed=0;
 
-#define TETOINTEGRADOR 1000000
+#define TETOINTEGRADOR 500000
 
 ISR(ADC_vect)
 {   
@@ -40,19 +40,20 @@ void ADC_init()
     ADMUX |= (1 << REFS0); //Escolhe a referência (AVCC with external capacitor at AREF pin)
 }
 void AVRG_IR()
-{
-    AVRG = ( (uint32_t) 0 * IR[0] + (uint32_t) 1000 * IR[1] + (uint32_t) 2000 * IR[2] + (uint32_t) 3000 * IR[3] + (uint32_t) 4000 * IR[4]) / (IR[0] + IR[1] + IR[2] + IR[3] + IR[4]);
+{   
+    cli();
+    AVRG = ((int) -5 * IR[0] + (int) -2 * IR[1] + (int) 0 * IR[2] + (int) 2 * IR[3] + (int) 5 * IR[4]);
+    sei();
 }
 void PID()
-{
-    P = (long) AVRG-2000;
+{   
+    P = AVRG;
     if(I<TETOINTEGRADOR && I>(-TETOINTEGRADOR))
-    I += (long) P;
-    D = (long) P - previous_P;
+    I += P;
+    D = P - previous_P;
     
     previous_P = P;
 
-    Motor_speed = (long) P * Kp + (long) I * Ki + (long) D * Kd;
-
+    Motor_speed = P*Kp + I*Ki + D*Kd;
 }
 

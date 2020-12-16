@@ -3,7 +3,7 @@
 
 int MOTOR_SPEED_A=0;
 int MOTOR_SPEED_B=0;
-int base_speed=200;
+int base_speed=140;
 
 
 ISR(TIMER1_COMPA_vect)

@@ -80,7 +80,7 @@ int main(void)
 
 
        
-      if (code == 0x6897) // skip track button
+      if (code == 0x6897) // 0 button
       {
          if (base_speed!=250)
          {

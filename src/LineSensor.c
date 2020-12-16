@@ -3,11 +3,13 @@
 uint8_t IR[5], MUXSELECTOR = 0;
 int AVRG;
 long P=0, I=0, D=0, previous_P=0;
+
 float Kp=0.15;
 float Ki=0;
 float Kd=0.9;
 long Motor_speed=0;
 
+#define TETOINTEGRADOR 1000000
 
 ISR(ADC_vect)
 {   
@@ -43,7 +45,8 @@ void AVRG_IR()
 }
 void PID()
 {
-    P = (long) AVRG-2008;
+    P = (long) AVRG-2000;
+    if(I<TETOINTEGRADOR && I>(-TETOINTEGRADOR))
     I += (long) P;
     D = (long) P - previous_P;
     

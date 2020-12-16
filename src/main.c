@@ -69,7 +69,7 @@ int main(void)
       
 
 
-      if (code == 0xc13d) // skip track button
+      if (code == 0xc23d) // skip track button
       {
          Kd+=0.1;
       }

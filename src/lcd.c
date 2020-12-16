@@ -40,7 +40,7 @@ void  lcd_info_print() //Funcao que coloca no LCD o valor dado pelos sensores de
 
 	sprintf(top, " %2d|%2d|%2d|%2d|%2d", auxIR[0], auxIR[1], auxIR[2],auxIR[3],auxIR[4]);*/
 	auxkp=Kp*100;
-	auxki=Ki*10000;
+	auxki=Ki*100000;
 	auxkd=Kd*10;
 
 	sprintf(top, " %2d|%2d|%2d ", auxkp,auxki,auxkd);

@@ -46,7 +46,7 @@ int main(void)
 
 
 
-      if (code == 0x22dd)
+      if (code == 0x22dd) // undo track button  
       {
          Kp+=0.05;
       }
@@ -56,7 +56,20 @@ int main(void)
          Kp-=0.05;
       }
 
-      if (code == 0xc13d)
+
+
+      if (code == 0x02fd) // pause track button  
+      {
+         Ki+=0.00005;
+      }
+      if (code == 0xa857)
+      {
+         Ki-=0.00005;
+      }
+      
+
+
+      if (code == 0xc13d) // skip track button
       {
          Kd+=0.1;
       }
@@ -64,6 +77,27 @@ int main(void)
       {
          Kd-=0.1;
       }
+
+
+       if (code == 0x6897) // skip track button
+      {
+         if (base_speed==250)
+         {
+            base_speed=250;
+         }
+         else
+         {
+            base_speed+=10;
+         }
+      }
+      if (code == 0x30cf)
+      {
+        
+         base_speed-=10;
+      
+      }
+
+
 
 
 

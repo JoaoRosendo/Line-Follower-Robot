@@ -3,6 +3,7 @@
 
 int MOTOR_SPEED_A=0;
 int MOTOR_SPEED_B=0;
+int base_speed=120;
 
 
 ISR(TIMER1_COMPA_vect)
@@ -38,8 +39,8 @@ void motor_init()
 
 void set_speed()
 {
-    MOTOR_SPEED_A=120-Motor_speed;
-    MOTOR_SPEED_B=120+Motor_speed;
+    MOTOR_SPEED_A=base_speed-Motor_speed;
+    MOTOR_SPEED_B=base_speed+Motor_speed;
 
    if (MOTOR_SPEED_A > 255) {
     MOTOR_SPEED_A = 255;

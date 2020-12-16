@@ -5,11 +5,11 @@ short int AVRG;
 long P=0, I=0, D=0, previous_P=0;
 
 float Kp= 0.22;
-float Ki=0.00003;
+float Ki=0.00004;
 float Kd=0.75;
 long Motor_speed=0;
 
-#define TETOINTEGRADOR 500000
+#define TETOINTEGRADOR 1000000
 
 ISR(ADC_vect)
 {   

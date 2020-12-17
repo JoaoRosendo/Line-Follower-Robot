@@ -9,7 +9,7 @@ float Ki=0.00004;
 float Kd=0.75;
 long Motor_speed=0;
 
-#define TETOINTEGRADOR 1000000
+#define TETOINTEGRADOR 400000
 
 ISR(ADC_vect)
 {   

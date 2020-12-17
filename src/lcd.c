@@ -30,26 +30,28 @@ ISR(TIMER0_OVF_vect)
 
 void  lcd_info_print() //Funcao que coloca no LCD o valor dado pelos sensores de 0 a 99 
 {	
-	char top[16];
+	char top[16], bot[16];
 	uint8_t  auxkp, auxkd, auxki;
-	/*uint8_t auxIR[5];
+	uint8_t auxIR[5];
 	
 	for(int i = 0; i<5; i++)
 	{
 		auxIR[i] = IR[i]*0.392;
 	}
 
-	sprintf(top, " %2d|%2d|%2d|%2d|%2d", auxIR[0], auxIR[1], auxIR[2],auxIR[3],auxIR[4]);*/
+	sprintf(top, " %2d|%2d|%2d|%2d|%2d", auxIR[0], auxIR[1], auxIR[2],auxIR[3],auxIR[4]);
+
+	setCursor(0,0);
+	Send_A_String(top);
+
 	auxkp=Kp*100;
 	auxki=Ki*100000;
 	auxkd=Kd*100;
 
-	sprintf(top, "%2d|%2d|%2d|%2d", auxkp,auxki,auxkd,base_speed);
+	sprintf(bot, " %2d|%2d|%2d|%2d", auxkp,auxki,auxkd,base_speed);
 
-	
-	//clearScreen(); nao parece ser necessario
-	Send_A_String(top);
-	setCursor(0,0);
+	setCursor(1,0);
+	Send_A_String(bot);
 	print_ready = 0;
 }
 

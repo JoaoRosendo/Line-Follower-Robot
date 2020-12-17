@@ -3,19 +3,18 @@
 
 int MOTOR_SPEED_A=0;
 int MOTOR_SPEED_B=0;
-int base_speed=140;
+int base_speed=150;
+
+#define REVERSECONSTANT 80
 
 
 ISR(TIMER1_COMPA_vect)
 {
-
 }
 
 ISR(TIMER1_COMPB_vect)
-{
-    
+{  
 }
-
 
 void motor_init()
 {   
@@ -42,21 +41,58 @@ void set_speed()
     MOTOR_SPEED_A=base_speed-Motor_speed;
     MOTOR_SPEED_B=base_speed+Motor_speed;
 
-   if (MOTOR_SPEED_A > 255) {
-    MOTOR_SPEED_A = 255;
+   
+    if ( (int) MOTOR_SPEED_A > 0)
+    {
+        PORTB &= ~(1 << PB3);
+        PORTB |=  (1 << PB0);
+
+         if (MOTOR_SPEED_A > 255)
+        {
+            MOTOR_SPEED_A = 255;
+        } 
+    }
+    
+    else
+    {   
+        MOTOR_SPEED_A = -MOTOR_SPEED_A;
+        PORTB &= ~(1 << PB0);
+        PORTB |=  (1 << PB3);
+
+         if (MOTOR_SPEED_A > REVERSECONSTANT)
+        {
+            MOTOR_SPEED_A = REVERSECONSTANT;
+        }
     }
 
-    if (MOTOR_SPEED_B > 255) {
-    MOTOR_SPEED_B = 255;
+
+
+
+
+
+    if ( (int) MOTOR_SPEED_B > 0)
+    {
+        PORTB &= ~(1 << PB5);
+        PORTB |=  (1 << PB4);
+
+        if (MOTOR_SPEED_B > 255)
+        {
+            MOTOR_SPEED_B = 255;
+        }
+    }
+    
+    else
+    {   
+        MOTOR_SPEED_B = -MOTOR_SPEED_B;
+        PORTB &= ~(1 << PB4);
+        PORTB |=  (1 << PB5);
+
+        if (MOTOR_SPEED_B > REVERSECONSTANT)
+        {
+            MOTOR_SPEED_B = REVERSECONSTANT;
+        }
     }
 
-    if (MOTOR_SPEED_A < 0) {
-    MOTOR_SPEED_A = 0;
-    }
-
-    if (MOTOR_SPEED_B < 0) {
-    MOTOR_SPEED_B = 0;
-    } 
 
     OCR1AL=MOTOR_SPEED_A;
     OCR1BL=MOTOR_SPEED_B;

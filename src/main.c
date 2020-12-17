@@ -10,7 +10,7 @@
 int main(void)
 {   
    sei();
-  // printf_init(); 
+   //printf_init(); 
    ADC_init();
    motor_init(); //desligar para retornar funcionalidade aos pinos que usam PWM
    LCD_init();

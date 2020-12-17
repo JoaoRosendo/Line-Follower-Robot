@@ -3,9 +3,9 @@
 
 int MOTOR_SPEED_A=0;
 int MOTOR_SPEED_B=0;
-int base_speed=150;
+int base_speed=180;
 
-#define REVERSECONSTANT 80
+#define REVERSECONSTANT 100
 
 
 ISR(TIMER1_COMPA_vect)
@@ -41,7 +41,8 @@ void set_speed()
     MOTOR_SPEED_A=base_speed-Motor_speed;
     MOTOR_SPEED_B=base_speed+Motor_speed;
 
-   
+    //printf("A:%d  B:%d",MOTOR_SPEED_A, MOTOR_SPEED_B);
+
     if ( (int) MOTOR_SPEED_A > 0)
     {
         PORTB &= ~(1 << PB3);
@@ -93,6 +94,7 @@ void set_speed()
         }
     }
 
+     //printf("A:%d  B:%d",MOTOR_SPEED_A, MOTOR_SPEED_B); 
 
     OCR1AL=MOTOR_SPEED_A;
     OCR1BL=MOTOR_SPEED_B;

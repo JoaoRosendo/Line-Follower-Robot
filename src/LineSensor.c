@@ -4,12 +4,12 @@ uint8_t IR[5], MUXSELECTOR = 0;
 short int AVRG;
 long P=0, I=0, D=0, previous_P=0;
 
-float Kp= 0.22;
-float Ki=0.00004;
-float Kd=0.75;
+float Kp= 0.23;
+float Ki=0.00020;
+float Kd=1;
 long Motor_speed=0;
 
-#define TETOINTEGRADOR 400000
+#define TETOINTEGRADOR 600000
 
 ISR(ADC_vect)
 {   

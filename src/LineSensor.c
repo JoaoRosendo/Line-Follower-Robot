@@ -2,21 +2,25 @@
 
 uint8_t IR[5], MUXSELECTOR = 0;
 short int AVRG;
-long P=0, I=0, D=0, previous_P=0;
+int P=0, D=0, previous_P=0;
+long int I=0;
 
-float Kp= 0.23;
-float Ki=0.00020;
-float Kd=1;
+float Kp= 0.075;
+float Ki=0.00060;
+float Kd=13.5;
 long Motor_speed=0;
 
-#define TETOINTEGRADOR 600000
+#define TETOINTEGRADOR 230000
 
 ISR(ADC_vect)
 {   
     //MUXSELECTOR escolhe o porto para ler; quando lido passa o próximo. IR[0] é o sensor mais à esquerda, IR[4] é o sensor mais à direita
     
     //Le o registo e incrementa variaveis de leitura
-    IR[MUXSELECTOR] = ADCH;  
+    if(ADCH >= 230) IR[MUXSELECTOR] = 250;
+    else if((ADCH > 31) && (ADCH < 230)) IR[MUXSELECTOR] = ADCH;
+    else IR[MUXSELECTOR] = 0;
+  
     ADMUX = ADMUX + 1;
     MUXSELECTOR++;
     
@@ -24,7 +28,7 @@ ISR(ADC_vect)
     if(MUXSELECTOR>4)
     {   
         MUXSELECTOR = 0;
-        ADMUX &= ~(1 << MUX0) & ~(1 << MUX1) & ~(1 << MUX2) & ~(1 << MUX3); 
+        ADMUX &= 0b11110000;            //~(1 << MUX0) & ~(1 << MUX1) & ~(1 << MUX2) & ~(1 << MUX3) (código menos eficaz)
     }
 
     //começa uma nova leitura ADC
@@ -42,18 +46,18 @@ void ADC_init()
 void AVRG_IR()
 {   
     cli();
-    AVRG = ((int) -5 * IR[0] + (int) -2 * IR[1] + (int) 0 * IR[2] + (int) 2 * IR[3] + (int) 5 * IR[4]);
+    AVRG = ((int) -10 * IR[0] + (int) -4 * IR[1] + (int) 0 * IR[2] + (int) 4 * IR[3] + (int) 10 * IR[4]);
     sei();
 }
 void PID()
 {   
-    P = AVRG;
-    if(I<TETOINTEGRADOR && I>(-TETOINTEGRADOR))
+    P = (int) AVRG;
+    if((I<=TETOINTEGRADOR  &&  I>=(-TETOINTEGRADOR)) || (I>TETOINTEGRADOR && P<0) || (I<(-TETOINTEGRADOR) && P>0))
     I += P;
-    D = P - previous_P;
-    
-    previous_P = P;
+    D = (int) P - (int) previous_P;
+    previous_P = (int) P;
 
     Motor_speed = P*Kp + I*Ki + D*Kd;
+    //printf("P:%d  I:%ld   D:%d  motor_speed:%d \n",P,I,D,Motor_speed);
 }
 

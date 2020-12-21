@@ -3,9 +3,9 @@
 
 int MOTOR_SPEED_A=0;
 int MOTOR_SPEED_B=0;
-int base_speed=180;
+int base_speed=250;
 
-#define REVERSECONSTANT 100
+#define REVERSECONSTANT 155
 
 
 ISR(TIMER1_COMPA_vect)
@@ -41,7 +41,7 @@ void set_speed()
     MOTOR_SPEED_A=base_speed-Motor_speed;
     MOTOR_SPEED_B=base_speed+Motor_speed;
 
-    //printf("A:%d  B:%d",MOTOR_SPEED_A, MOTOR_SPEED_B);
+   // printf("A:%d  B:%d      AVG:%d     IR1:%d  IR2:%d  IR3:%d  IR4:%d  IR5:%d\n",MOTOR_SPEED_A, MOTOR_SPEED_B,AVRG, IR[0],IR[1],IR[2],IR[3],IR[4]);
 
     if ( (int) MOTOR_SPEED_A > 0)
     {
@@ -93,8 +93,6 @@ void set_speed()
             MOTOR_SPEED_B = REVERSECONSTANT;
         }
     }
-
-     //printf("A:%d  B:%d",MOTOR_SPEED_A, MOTOR_SPEED_B); 
 
     OCR1AL=MOTOR_SPEED_A;
     OCR1BL=MOTOR_SPEED_B;

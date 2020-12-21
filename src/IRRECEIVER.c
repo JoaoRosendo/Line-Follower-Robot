@@ -10,7 +10,7 @@ volatile unsigned long ir_code;
 
 ISR(TIMER2_OVF_vect) {                           // Timer1 interrupt service routine (ISR)
   nec_state = 0;                                 // Reset decoding process
-  TCCR2B = 0;                                    // Disable Timer1 module
+  TCCR2B = 0;                                    // Disable Timer2 module
 }
 
 void setup_int0 (int T){

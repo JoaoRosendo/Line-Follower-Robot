@@ -16,8 +16,6 @@ int main(void)
    LCD_init();
    
    Send_A_String("eita mlk");
-   _delay_ms(2000);
-   clearScreen();
 
    PORTB |= (1<< PB0) | (1<< PB4);
    int on=0;
@@ -29,7 +27,7 @@ int main(void)
    while (1) 
    {   
       
-      code=button_press();
+     /* code=button_press();
 
       if (code == 0xa25d)
       {
@@ -48,12 +46,12 @@ int main(void)
 
       if (code == 0x22dd) // undo track button  
       {
-         Kp+=0.02;
+         Kp+=0.01;
       }
 
       if (code == 0xe01f) // down arrow button 
       {
-         Kp-=0.02;
+         Kp-=0.01;
       }
 
 
@@ -75,7 +73,7 @@ int main(void)
       }
       if (code == 0x906f)// up arrow button 
       {
-         Kd-=0.05;
+         Kd-=0.1;
       }
 
 
@@ -84,18 +82,18 @@ int main(void)
       {
          if (base_speed!=250)
          {
-            base_speed+=10;
+            base_speed+=5;
          }
       }
       if (code == 0x30cf)// 1 button
       {
          if (base_speed!=0)
          {
-            base_speed-=10;
+            base_speed-=5;
          }
       }
 
-
+  
 
 
 
@@ -104,14 +102,13 @@ int main(void)
       {
          OCR1AL=0;
          OCR1BL=0;
-      }
+      }*/
 
-      if (on%2 != 0)
+      if (/*on%2 != 0*/ 1)
       {
          AVRG_IR();
          PID();
          set_speed();
-
       }
 
       //printf("IR1:%d  IR2:%d  IR3:%d  IR4:%d  IR5:%d AVRG:%d PID:%ld MSA:%d MSB:%d  \n",IR[0],IR[1],IR[2],IR[3],IR[4], AVRG, Motor_speed, OCR1AL,OCR1BL); //valores do sensor de linha

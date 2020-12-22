@@ -5,112 +5,31 @@
 #include "motor.h"
 #include "serial_printf.h"
 #include "lcd.h"
-#include "IRRECEIVER.h"
+#include "IRreceiver.h"
 
 int main(void)
-{   
+{
    sei();
-   //printf_init(); 
-   ADC_init();
-   motor_init(); //desligar para retornar funcionalidade aos pinos que usam PWM
    LCD_init();
-   
-   Send_A_String("eita mlk");
+   Send_A_String("Começando");
+   ADC_init();
+   motor_init(); 
+   IR_init();
 
-   PORTB |= (1<< PB0) | (1<< PB4);
-   int on=0;
-   int code=0;
-   
-   setup_timer2();
-   setup_int0(1);
+   while (1)
+   {  
+      read_IRcode();
 
-   while (1) 
-   {   
-      
-     /* code=button_press();
-
-      if (code == 0xa25d)
-      {
-         on+=1;
-      }
-
-      if (code == 0xe21d)
-      {
-         if(print_ready)
-         {
-         lcd_info_print();
-         }
-      }
-
-
-
-      if (code == 0x22dd) // undo track button  
-      {
-         Kp+=0.01;
-      }
-
-      if (code == 0xe01f) // down arrow button 
-      {
-         Kp-=0.01;
-      }
-
-
-
-      if (code == 0x02fd) // pause track button  
-      {
-         Ki+=0.00001;
-      }
-      if (code == 0xa857) // VOL- button 
-      {
-         Ki-=0.00001;
-      }
-      
-
-
-      if (code == 0xc23d) // skip track button
-      {
-         Kd+=0.1;
-      }
-      if (code == 0x906f)// up arrow button 
-      {
-         Kd-=0.1;
-      }
-
-
-       
-      if (code == 0x6897) // 0 button
-      {
-         if (base_speed!=250)
-         {
-            base_speed+=5;
-         }
-      }
-      if (code == 0x30cf)// 1 button
-      {
-         if (base_speed!=0)
-         {
-            base_speed-=5;
-         }
-      }
-
-  
-
-
-
-      
-      if (on%2 == 0)
-      {
-         OCR1AL=0;
-         OCR1BL=0;
-      }*/
-
-      if (/*on%2 != 0*/ 1)
+      if (on)
       {
          AVRG_IR();
          PID();
          set_speed();
       }
-
-      //printf("IR1:%d  IR2:%d  IR3:%d  IR4:%d  IR5:%d AVRG:%d PID:%ld MSA:%d MSB:%d  \n",IR[0],IR[1],IR[2],IR[3],IR[4], AVRG, Motor_speed, OCR1AL,OCR1BL); //valores do sensor de linha
+      else
+      {
+         OCR1AL = 0;
+         OCR1BL = 0;
+      }
    }
 }

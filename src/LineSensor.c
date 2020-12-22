@@ -5,9 +5,9 @@ short int AVRG;
 int P=0, D=0, previous_P=0;
 long int I=0;
 
-float Kp= 0.075;
+float Kp= 0.065;
 float Ki=0.00060;
-float Kd=13.5;
+float Kd=12;
 long Motor_speed=0;
 
 #define TETOINTEGRADOR 230000
@@ -15,7 +15,6 @@ long Motor_speed=0;
 ISR(ADC_vect)
 {   
     //MUXSELECTOR escolhe o porto para ler; quando lido passa o próximo. IR[0] é o sensor mais à esquerda, IR[4] é o sensor mais à direita
-    
     //Le o registo e incrementa variaveis de leitura
     if(ADCH >= 230) IR[MUXSELECTOR] = 250;
     else if((ADCH > 31) && (ADCH < 230)) IR[MUXSELECTOR] = ADCH;
@@ -43,12 +42,14 @@ void ADC_init()
     ADMUX |= (1 << ADLAR); //Torna o registo left adjusted (facilita leitura)
     ADMUX |= (1 << REFS0); //Escolhe a referência (AVCC with external capacitor at AREF pin)
 }
+
 void AVRG_IR()
 {   
     cli();
-    AVRG = ((int) -10 * IR[0] + (int) -4 * IR[1] + (int) 0 * IR[2] + (int) 4 * IR[3] + (int) 10 * IR[4]);
+    AVRG = ((int) -10 * IR[0] + (int) -5 * IR[1] + (int) 0 * IR[2] + (int) 5 * IR[3] + (int) 10 * IR[4]);
     sei();
 }
+
 void PID()
 {   
     P = (int) AVRG;
